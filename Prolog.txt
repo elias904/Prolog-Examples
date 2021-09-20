@@ -1,0 +1,73 @@
+/*Insert at end of list(insere um elemento no final da lista) */
+
+inserir_final([], Y, [Y]).         
+inserir_final([I|R], Y, [I|R1]) :- 
+    inserir_final(R, Y, R1).       
+
+
+Example: 
+
+% ?- inserir_final([a,b,c],d,L).
+% L = [a,b,c,d].
+
+/* Inserts an element at any position in the list(insere um elemento em qualquer posição da lista) */
+
+conc([], L, L).
+conc([X | L1], L2, [X | L3]) :-conc(L1, L2, L3).
+
+tamanho([], 0).
+tamanho([_ | R], N) :-tamanho(R, N1),N is N1+1.
+
+insere_p(E, Es0, I1, Es) :-
+    maplist(qlq_coisa, Es, [_|Es0]),
+    conc(Prefix, Suffix, Es0),
+    tamanho([_|Prefix], I1),
+    conc(Prefix, [E|Suffix], Es).
+
+qlq_coisa(_, _).
+
+
+Example: 
+
+% ?- insere_p(X, [a,b,c,d,e], 3, Xs).
+% Xs = [a,b,X,c,d,e].
+
+
+/* remove from any position in the list(remove item de qualquer posição de uma dada lista) */
+
+remove_p([_|H],1,H):-!.
+   remove_p([G|H],N,[G|L]):- N > 1, Nn is N - 1,!,remove_p(H,Nn,L).
+
+
+Example: 
+
+% ?- remove_p([a,b,c],3,L)
+% L = [a,b].
+
+/* intersection between two lists(intersecção entre duas Listas) */
+
+pertence(X,[X|_]).
+pertence(X,[_|Xs]) :- pertence(X,Xs).
+intersecao([],_,[]).
+intersecao([Cabeca|Cauda], L2, [Cabeca|NovoResto]) :-
+	pertence(Cabeca,L2),
+	intersecao(Cauda, L2, NovoResto).
+intersecao([Cabeca|R], L2, NovoResto):-
+	not(pertence(Cabeca,L2)),
+	intersecao(R, L2, NovoResto).
+
+Example: 
+
+% ?- intersecao([1,2,3],[3,4,5],X).
+% X = [3]
+
+
+/* sum of N natural numbers(soma dos N números naturais)*/
+
+soma(N,R) :- R is (1 + N) * N/2.
+
+
+Example: 
+
+% ?- soma(10,R).
+% R = 55.
